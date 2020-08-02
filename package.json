@@ -25,14 +25,14 @@
     "webpack-cli": "^3.3.9",
     "webpack-dev-server": "^3.8.1",
     "elliptic": ">=6.5.3",
-    "websocket-extensions": ">=0.1.4"
+    "websocket-extensions": ">=0.1.4",
+    "lodash": ">=4.17.19"
   },
   "dependencies": {
     "sanitize-html": "^1.20.1",
     "colormap": "2.3.1",
     "ol": "^6.3.1",
     "ol-hashed": "2.0.0",
-    "ol-mapbox-style": "4.3.1",
-    "lodash": ">=4.17.19"
+    "ol-mapbox-style": "4.3.1"
   }
 }
