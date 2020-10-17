@@ -9,9 +9,18 @@ class PlaceFinder {
     const locateUserBtn = document.getElementById('locate-btn');
     this.shareBtn = document.getElementById('share-btn');
 
+    // const enableNotificationsButtons = document.querySelectorAll('.enable-notifications');
+    // // console.log(window, window.Notification);
+    // if ('Notification' in window) {
+    //   for (var i = 0; i < enableNotificationsButtons.length; i++) {
+    //     enableNotificationsButtons[i].style.display = 'inline-block';
+    //     enableNotificationsButtons[i].addEventListener('click', this.askForNotificationPermission);
+    //   }
+    // }
+
     locateUserBtn.addEventListener('click', this.locateUserHandler.bind(this));
     this.shareBtn.addEventListener('click', this.sharePlaceHandler);
-    // addressForm.addEventListener('submit', this.findAddressHandler.bind(this));
+    addressForm.addEventListener('submit', this.findAddressHandler.bind(this));
   }
 
   sharePlaceHandler() {
@@ -79,24 +88,77 @@ class PlaceFinder {
 
   async findAddressHandler(event) {
     event.preventDefault();
+    
     const address = event.target.querySelector('input').value;
-    if (!address || address.trim().length === 0) {
-      alert('Invalid address entered - please try again!');
-      return;
+    console.log(address);
+
+    const lat = document.getElementById('lat-input').value;
+    const lng = document.getElementById('lng-input').value;
+    console.log('lat', lat, 'lng', lng);
+    
+    function isNumeric(n) {
+      return !isNaN(parseFloat(n)) && isFinite(n);
     }
+    // console.log(isNumeric(lat));
+    if (
+      (!lat || Number(lat) < -90 || Number(lat) > 90 || !isNumeric(lat)) ||
+      (!lng || Number(lng) < -180 || Number(lng) > 180  || !isNumeric(lng))
+    ) {
+      alert('Please enter valid Latitude and Longitude');
+    }
+
+    // if (!address || address.trim().length === 0) {
+    //   alert('Invalid address entered - please try again!');
+    //   return;
+    // }
     const modal = new Modal(
       'loading-modal-content',
       'Loading location - please wait!'
     );
     modal.show();
     try {
-      const coordinates = await getCoordsFromAddress(address);
+      const coordinates = await getCoordsFromAddress(address, lat, lng);
       this.selectPlace(coordinates, address);
     } catch (err) {
       alert(err.message);
     }
     modal.hide();
   }
+
+
+  // notification from pwa-course
+  askForNotificationPermission() {
+    Notification.requestPermission(function(result) {
+      console.log('User Choice', result);
+      if (result !== 'granted') {
+        console.log('No notification permission granted!');
+      } else {
+        displayConfirmNotification();
+      }
+    });
+  }
+
+  
 }
 
 const placeFinder = new PlaceFinder();
+
+
+// notification from pwa-course
+// function askForNotificationPermission() {
+//   Notification.requestPermission(function(result) {
+//     console.log('User Choice', result);
+//     if (result !== 'granted') {
+//       console.log('No notification permission granted!');
+//     } else {
+//       displayConfirmNotification();
+//     }
+//   });
+// }
+
+// if ('Notification' in window) {
+//   for (var i = 0; i < enableNotificationsButtons.length; i++) {
+//     enableNotificationsButtons[i].style.display = 'inline-block';
+//     enableNotificationsButtons[i].addEventListener('click', askForNotificationPermission);
+//   }
+// }

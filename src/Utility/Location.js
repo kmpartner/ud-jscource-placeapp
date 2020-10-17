@@ -35,6 +35,7 @@ export async function getAddressFromCoords(coords) {
   return '6th Avenue'; // return any dummy address you want
 }
  
-export async function getCoordsFromAddress(address) {
+export async function getCoordsFromAddress(address, lat, lng) {
+  return { lat: lat, lng: lng }
   return {lat: 47.01, lng: 33.55}; // return any dummy coordinates you want
 }
