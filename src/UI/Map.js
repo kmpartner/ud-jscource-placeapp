@@ -19,12 +19,13 @@ import OSM from 'ol/source/OSM';
 import { Modal } from './Modal';
 
 export class Mapclass {
-  constructor(coords) {
+  constructor(coords, zoomLevel) {
     // this.coordinates = coords;
-    this.render(coords);
+    // const zoomLevel = null;
+    this.render(coords, zoomLevel);
   }
 
-  render(coordinates) {
+  render(coordinates, zoomLevel) {
     // if (!google) {
     //   alert('Could not load map libray - please try again later!');
     //   return;
@@ -46,7 +47,7 @@ export class Mapclass {
     // );
     // modal.show();
 
-    console.log(coordinates);
+    console.log(coordinates, zoomLevel);
     document.getElementById('map').textContent = ''; 
     // document.getElementById('map-container').textContent = ''; 
 
@@ -91,10 +92,12 @@ export class Mapclass {
     ]);
 
     map.getView().fit(source.getExtent(), {
-      maxZoom: 4,
+      // maxZoom: 4,
+      maxZoom: zoomLevel ? zoomLevel : 4,
       duration: 2000
     });
 
-    // modal.hide();
   }
+
+
 }

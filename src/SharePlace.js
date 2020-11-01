@@ -33,6 +33,8 @@ class PlaceFinder {
     navigator.clipboard.writeText(sharedLinkInputElement.value)
       .then(() => {
         alert('Copied into clipboard!');
+
+        window.location.href = sharedLinkInputElement.value;
       })
       .catch(err => {
         console.log(err);
@@ -40,16 +42,17 @@ class PlaceFinder {
       });
   }
 
-  selectPlace(coordinates, address) {
+  selectPlace(coordinates, address, zoomFactor) {
+
 
     if (this.map) {
-      this.map.render(coordinates);
+      this.map.render(coordinates, zoomFactor);
     } else {
-      this.map = new Mapclass(coordinates);
+      this.map = new Mapclass(coordinates, zoomFactor);
     }
     this.shareBtn.disabled = false;
     const sharedLinkInputElement = document.getElementById('share-link');
-    sharedLinkInputElement.value = `${location.origin}/my-place?address=${encodeURI(address)}&lat=${coordinates.lat}&lng=${coordinates.lng}`;
+    sharedLinkInputElement.value = `${location.origin}/my-place?address=${encodeURI(address)}&lat=${coordinates.lat}&lng=${coordinates.lng}&zoom=${zoomFactor}`;
 
   }
 
@@ -75,7 +78,7 @@ class PlaceFinder {
         };
         const address = await getAddressFromCoords(coordinates);
         modal.hide();
-        this.selectPlace(coordinates, address);
+        this.selectPlace(coordinates, address, zoomLevel);
       },
       error => {
         modal.hide();
@@ -94,6 +97,7 @@ class PlaceFinder {
 
     const lat = document.getElementById('lat-input').value;
     const lng = document.getElementById('lng-input').value;
+    let zoomLevel = document.getElementById('zoom-level').value;
     console.log('lat', lat, 'lng', lng);
     
     function isNumeric(n) {
@@ -107,6 +111,13 @@ class PlaceFinder {
       alert('Please enter valid Latitude and Longitude');
     }
 
+    if (!zoomLevel || Math.floor(Number(zoomLevel)) > 28 || Math.floor(Number(zoomLevel)) <  0 || !isNumeric(zoomLevel)) {
+      zoomLevel = 4;
+    } else {
+      zoomLevel = Math.floor(Number(zoomLevel));
+    }
+    console.log('zoomLevel', zoomLevel);
+
     // if (!address || address.trim().length === 0) {
     //   alert('Invalid address entered - please try again!');
     //   return;
@@ -118,7 +129,7 @@ class PlaceFinder {
     modal.show();
     try {
       const coordinates = await getCoordsFromAddress(address, lat, lng);
-      this.selectPlace(coordinates, address);
+      this.selectPlace(coordinates, address, zoomLevel);
     } catch (err) {
       alert(err.message);
     }

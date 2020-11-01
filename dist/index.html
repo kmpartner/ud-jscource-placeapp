@@ -56,6 +56,12 @@
         value="Select a place to get a sharable link."
       />
       <button id="share-btn" disabled>Share Place</button>
+
+      <!-- <a class="twitter-share-button"
+        href="https://twitter.com/intent/tweet?text=Hello%20world"
+      >
+        Tweet
+      </a> -->
     </section>
 
     <section id="place-data">
@@ -64,6 +70,7 @@
         <!-- <input type="text" /> -->
         <input id="lat-input" type="text" placeholder="Latitude... -90~90"/>
         <input id="lng-input" type="text" placeholder="Longitude...-180~180"/>
+        <input id="zoom-level" type="text" placeholder="zoom less than 28 default 4"/>
         <button type="submit">Find Place</button>
       </form>
       <button id="locate-btn">Get Current Location</button>
