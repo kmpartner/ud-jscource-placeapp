@@ -8,7 +8,6 @@ class PlaceFinder {
     const addressForm = document.querySelector('form');
     const locateUserBtn = document.getElementById('locate-btn');
     this.shareBtn = document.getElementById('share-btn');
-
     // const enableNotificationsButtons = document.querySelectorAll('.enable-notifications');
     // // console.log(window, window.Notification);
     // if ('Notification' in window) {
@@ -24,17 +23,20 @@ class PlaceFinder {
   }
 
   sharePlaceHandler() {
+    const zoomIndicate = document.getElementById('zoom-indicator');
+    const txZoomIndex = zoomIndicate.textContent;
     const sharedLinkInputElement = document.getElementById('share-link');
+
     if (!navigator.clipboard) {
       sharedLinkInputElement.select();
       return;
     }
 
-    navigator.clipboard.writeText(sharedLinkInputElement.value)
+    navigator.clipboard.writeText(sharedLinkInputElement.value  + `&zoom=${txZoomIndex}`)
       .then(() => {
         alert('Copied into clipboard!');
 
-        window.location.href = sharedLinkInputElement.value;
+        window.location.href = sharedLinkInputElement.value + `&zoom=${txZoomIndex}`;
       })
       .catch(err => {
         console.log(err);
@@ -44,15 +46,23 @@ class PlaceFinder {
 
   selectPlace(coordinates, address, zoomFactor) {
 
+    const zoomIndicate = document.getElementById('zoom-indicator');
+    const zoomIndex = Number(zoomIndicate.textContent) || zoomFactor;
 
     if (this.map) {
-      this.map.render(coordinates, zoomFactor);
+      // console.log(this.map);
+      // console.log(zoomIndicate);
+      // console.log('zoomIndex', zoomIndex);
+
+      this.map.render(coordinates, zoomIndex);
     } else {
-      this.map = new Mapclass(coordinates, zoomFactor);
+
+      this.map = new Mapclass(coordinates, zoomIndex);
+      // console.log(this.map);
     }
     this.shareBtn.disabled = false;
     const sharedLinkInputElement = document.getElementById('share-link');
-    sharedLinkInputElement.value = `${location.origin}/my-place?address=${encodeURI(address)}&lat=${coordinates.lat}&lng=${coordinates.lng}&zoom=${zoomFactor}`;
+    sharedLinkInputElement.value = `${location.origin}/my-place?address=${encodeURI(address)}&lat=${coordinates.lat}&lng=${coordinates.lng}`;
 
   }
 
@@ -97,7 +107,8 @@ class PlaceFinder {
 
     const lat = document.getElementById('lat-input').value;
     const lng = document.getElementById('lng-input').value;
-    let zoomLevel = document.getElementById('zoom-level').value;
+    // let zoomLevel = document.getElementById('zoom-level').value;
+    let zoomLevel = "4"
     console.log('lat', lat, 'lng', lng);
     
     function isNumeric(n) {
@@ -148,7 +159,6 @@ class PlaceFinder {
       }
     });
   }
-
   
 }
 

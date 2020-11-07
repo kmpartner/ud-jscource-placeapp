@@ -16,13 +16,15 @@ import {Style, Icon, Fill} from 'ol/style';
 
 import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
-import { Modal } from './Modal';
+
+import sanitizeHtml from 'sanitize-html';
 
 export class Mapclass {
   constructor(coords, zoomLevel) {
     // this.coordinates = coords;
     // const zoomLevel = null;
     this.render(coords, zoomLevel);
+    this.mapInfo;
   }
 
   render(coordinates, zoomLevel) {
@@ -61,7 +63,8 @@ export class Mapclass {
       view: new ol.View({
         center: ol.proj.fromLonLat([coordinates.lng, coordinates.lat]),
         // center: ol.proj.fromLonLat([37.41, 8.82]),
-        zoom: 2
+        // zoom: 2
+        zoom: zoomLevel? zoomLevel : 4
       })
     });
 
@@ -91,12 +94,33 @@ export class Mapclass {
       new Feature(new Point(fromLonLat([coordinates.lng, coordinates.lat])))
     ]);
 
-    map.getView().fit(source.getExtent(), {
-      // maxZoom: 4,
-      maxZoom: zoomLevel ? zoomLevel : 4,
-      duration: 2000
-    });
+    // map.getView().fit(source.getExtent(), {
+    //   // maxZoom: 4,
+    //   maxZoom: zoomLevel ? zoomLevel : 4,
+    //   duration: 2000
+    // });
 
+    this.mapInfo = map;
+
+
+    //// detect current zoom level
+    var currZoom = map.getView().getZoom();
+
+    const zoomIndicate = document.getElementById('zoom-indicator');
+    if (zoomIndicate) {
+      zoomIndicate.innerHTML = sanitizeHtml(currZoom);
+    }
+
+    map.on('moveend', function(e) {
+      var newZoom = map.getView().getZoom();
+      if (currZoom != newZoom) {
+        console.log('zoom end, new zoom: ' + newZoom);
+        currZoom = newZoom;
+
+        zoomIndicate.innerHTML = sanitizeHtml(currZoom);
+      }
+    });
+    
   }
 
 
