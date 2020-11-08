@@ -1,5 +1,6 @@
 #selected-place {
   width: 40rem;
+  width: 30rem;
   height: 25rem;
   max-width: 90%;
   margin: 2rem auto;
@@ -16,6 +17,7 @@
 
 #share-controls {
   width: 40rem;
+  width: 30rem;
   max-width: 90%;
   margin: 2rem auto;
   border: 1px solid #ccc;
@@ -50,4 +52,12 @@
   height: 100%;
   width: 100%;
   font-family: sans-serif;
+}
+
+#zoom-indicator {
+  display: none;
+}
+
+#lonlat-indicator {
+  display: none;
 }
