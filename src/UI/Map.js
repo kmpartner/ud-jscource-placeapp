@@ -103,21 +103,37 @@ export class Mapclass {
     this.mapInfo = map;
 
 
-    //// detect current zoom level
+    //// detect current zoom & center level
     var currZoom = map.getView().getZoom();
+    var currCenter = ol.proj.toLonLat(map.getView().getCenter());
 
     const zoomIndicate = document.getElementById('zoom-indicator');
     if (zoomIndicate) {
       zoomIndicate.innerHTML = sanitizeHtml(currZoom);
     }
 
+    const lonLatIndicate = document.getElementById('lonlat-indicator');
+    if (lonLatIndicate) {
+      lonLatIndicate.innerHTML = sanitizeHtml(`${currCenter[0]}, ${currCenter[1]}`);
+    }
+
     map.on('moveend', function(e) {
+      // console.log(map.getView(), map.getView().getCenter());
+
       var newZoom = map.getView().getZoom();
       if (currZoom != newZoom) {
         console.log('zoom end, new zoom: ' + newZoom);
         currZoom = newZoom;
 
         zoomIndicate.innerHTML = sanitizeHtml(currZoom);
+      }
+
+      var newCenter = ol.proj.toLonLat(map.getView().getCenter());
+      if (currCenter != newCenter) {
+        console.log('new center: ' + newCenter);
+        currCenter = newCenter
+
+        lonLatIndicate.innerHTML = sanitizeHtml(`${currCenter[0]}, ${currCenter[1]}`);
       }
     });
     

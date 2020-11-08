@@ -27,6 +27,7 @@ class PlaceFinder {
     const txZoomIndex = zoomIndicate.textContent;
     const sharedLinkInputElement = document.getElementById('share-link');
 
+    console.log(this.map);
     if (!navigator.clipboard) {
       sharedLinkInputElement.select();
       return;
@@ -36,7 +37,7 @@ class PlaceFinder {
       .then(() => {
         alert('Copied into clipboard!');
 
-        window.location.href = sharedLinkInputElement.value + `&zoom=${txZoomIndex}`;
+        // window.location.href = sharedLinkInputElement.value + `&zoom=${txZoomIndex}`;
       })
       .catch(err => {
         console.log(err);
