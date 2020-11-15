@@ -2,6 +2,7 @@ import { Modal } from './UI/Modal';
 // import * as Modal from './UI/Modal';
 import { Mapclass } from './UI/Map';
 import { getCoordsFromAddress, getAddressFromCoords } from './Utility/Location';
+import { createShortUrl } from './Utility/ShortUrl'
 
 class PlaceFinder {
   constructor() {
@@ -43,6 +44,32 @@ class PlaceFinder {
         console.log(err);
         sharedLinkInputElement.select();
       });
+
+
+
+
+    //// create shorturl for twitter
+    createShortUrl('http://localhost:8000', sharedLinkInputElement.value + `&zoom=${txZoomIndex}`)
+      .then(res => {
+        console.log(res);
+
+        const twitterButton = document.getElementById('twitter-button');
+        twitterButton.setAttribute('href', 'https://twitter.com/intent/tweet?text=' + `place link: ${res.data.shortUrl}`);
+        
+        //// href="https://twitter.com/intent/tweet?text=Hello%20world"
+        
+
+        //// change visibility twitter share button
+        twitterButton.style.visibility="";
+        twitterButton.addEventListener('click', () => {
+          twitterButton.style.visibility="hidden"
+        })
+      })
+      .catch(err => {
+        console.log(err);
+      })
+
+
   }
 
   selectPlace(coordinates, address, zoomFactor) {
