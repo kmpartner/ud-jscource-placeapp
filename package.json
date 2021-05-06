@@ -35,6 +35,6 @@
     "ol": "^6.3.1",
     "ol-hashed": "2.0.0",
     "ol-mapbox-style": "4.3.1",
-    "sanitize-html": "^1.20.1"
+    "sanitize-html": "^2.3.2"
   }
 }
